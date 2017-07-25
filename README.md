@@ -11,9 +11,17 @@ Collection of custom Tensorflow builds with extended instruction sets enabled.
 
 ## Haswell
 
+### Ubuntu
+
 * `tensorflow-1.2.1-cp35-cp35m-linux_x86_64.whl`: Compiled on Ubuntu 16.04 on GCP with Intel(R) Xeon(R) CPU @ 2.30GHz CPU using `-march=native -msse4.1 -msse4.2 -mavx -mavx2 -mfma` for `python3.5`.
 
+### Debian
+
+* `tensorflow-1.2.1-cp35-cp35m-linux_x86_64.whl`: Compiled on Debian Jessie on GCP with Intel(R) Xeon(R) CPU @ 2.30GHz CPU using `-march=native -msse4.1 -msse4.2 -mavx -mavx2 -mfma` for `python3.5`.
+
 ## Broadwell
+
+### Ubuntu
 
 * `tensorflow-1.2.1-cp35-cp35m-linux_x86_64.whl`: Compiled on Ubuntu 16.04 with an i7-6900K CPU using `-march=native -msse4.1 -msse4.2 -mavx -mavx2 -mfma` for `python3.5`.
 

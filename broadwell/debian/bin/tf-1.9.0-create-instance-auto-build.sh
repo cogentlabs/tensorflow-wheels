@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTANCE_NAME=tf-1.9.0-auto-build-$(whoami)-$(date +"%Y%m%d-%H%M%S")
+INSTANCE_NAME=tf-1.9.0-auto-build-broadwell-debian-$(whoami)-$(date +"%Y%m%d-%H%M%S")
 PROJECT=brew-staging
 ZONE=asia-northeast1-b
 MACHINE_TYPE=n1-standard-2

@@ -2,6 +2,10 @@
 
 Collection of custom Tensorflow builds with extended instruction sets enabled.
 
+## Using startup scripts in GCE
+
+The addition of Tensorflow 1.9.0 wheels comes with automated scripts for rebuilding the wheels in `${cpu}/${os}/bin/`. One script `tf-${version}-create-instance-auto-build.sh` will launch an instance in GCE with the correct machine settings, etc and provide the corresponding auto-build startup script to the instance. You can ssh into that new instance to check the status (`tail -f /var/log/syslog` on Debian) and download the wheel file when it is complete.
+
 ## Build steps
 
 - Clone Tensorflow

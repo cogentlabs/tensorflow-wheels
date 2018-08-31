@@ -96,8 +96,8 @@ When the build is complete, your Tensorflow wheel file will be located in
 
 To copy the file to your local machine (e.g. the Debian instance):
 
-    gcloud compute scp -r \\
-        ${DEBIAN_INSTANCE_NAME}:/home/${GCLOUD_USER}/tensorflow_pkg \\
+    gcloud compute scp --recurse \\
+        ${DEBIAN_INSTANCE_NAME}:/tensorflow_pkg/${EXPECTED_WHEEL_NAME} \\
         ./tensorflow_1.10.0_pkg \\
         --project ${PROJECT} \\
         --zone ${ZONE}

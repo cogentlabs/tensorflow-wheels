@@ -66,7 +66,7 @@ RUN set -x \
     && patch -s -p1 < ../tf-${TENSORFLOW_VERSION}-alpine.patch \
     && sed -i -e '/JEMALLOC_HAVE_SECURE_GETENV/d' third_party/jemalloc.BUILD \
     && PYTHON_BIN_PATH=/usr/local/bin/python3 \
-        PYTHON_LIB_PATH=/usr/local/lib/python3.6/site-packages \
+        PYTHON_LIB_PATH=/usr/local/lib/python3.5/site-packages \
         CC_OPT_FLAGS="-march=native" \
         TF_NEED_JEMALLOC=1 \
         TF_NEED_GCP=0 \
@@ -80,9 +80,8 @@ RUN set -x \
         TF_NEED_MPI=0 \
         bash configure \
     && bazel build -c opt ${EXTRA_BAZEL_ARGS} //tensorflow/tools/pip_package:build_pip_package \
-    && ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
-
-RUN pip3 install --no-cache-dir /tmp/tensorflow_pkg/tensorflow-${TENSORFLOW_VERSION}-cp35-cp35m-linux_x86_64.whl \
+    && ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg \
+    && pip3 install --no-cache-dir /tmp/tensorflow_pkg/tensorflow-${TENSORFLOW_VERSION}-cp35-cp35m-linux_x86_64.whl \
     && apk del \
        .builddeps \
        .builddeps.1 \

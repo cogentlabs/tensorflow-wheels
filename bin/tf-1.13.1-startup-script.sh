@@ -49,11 +49,13 @@ cd Python-3.6.3
 ./configure --enable-optimizations --with-ensurepip=install
 sudo make altinstall
 
-sudo pip3.6 install -U --user pip
+python3.6 -m pip install -U --user pip
 export PATH=$PATH:~/.local/bin/
 
 # Extra pip package dependencies...
-pip install -U --user six numpy wheel setuptools mock
+# numpy has upper-bound or things break in compile, see:
+# https://github.com/tensorflow/tensorflow/issues/41061
+pip install -U --user six "numpy<1.19.0" wheel setuptools mock
 pip install -U --user keras_applications==1.0.6 --no-deps
 pip install -U --user keras_preprocessing==1.0.5 --no-deps
 

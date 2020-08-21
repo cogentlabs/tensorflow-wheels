@@ -23,12 +23,13 @@ TF_VERSION_DOT=$(echo $TF_VERSION | sed -e 's/-/./g')
 
 PROJECT=algebraic-cycle-111108
 ZONE=asia-northeast1-b
-MACHINE_TYPE=n1-standard-2
-MIN_CPU_PLATFORM="Intel Broadwell"
+MACHINE_TYPE=n2-standard-2
+MIN_CPU_PLATFORM="Intel Cascade Lake"
 BOOT_DISK_SIZE=10GB
 BOOT_DISK_TYPE=pd-standard
 
-GCLOUD_USER=$(gcloud config get-value account | sed -e 's/@.*//g')
+# replace '.' with '_' since a GCP instance name can't have a dot
+GCLOUD_USER=$(gcloud config get-value account | sed -e 's/@.*//g' -e 's/\./\_/g')
 
 DEBIAN_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-broadwell-debian-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
 DEBIAN_IMAGE=debian-9-stretch-v20180814
@@ -40,7 +41,7 @@ UBUNTU_IMAGE_PROJECT=ubuntu-os-cloud
 
 EXPECTED_WHEEL_NAME=tensorflow-${TF_VERSION_DOT}-cp36-cp36m-linux_x86_64.whl
 
-gcloud beta compute instances create "$DEBIAN_INSTANCE_NAME" \
+gcloud compute instances create "$DEBIAN_INSTANCE_NAME" \
     --project=$PROJECT \
     --zone=$ZONE \
     --machine-type=$MACHINE_TYPE \
@@ -48,7 +49,7 @@ gcloud beta compute instances create "$DEBIAN_INSTANCE_NAME" \
     --image=$DEBIAN_IMAGE \
     --image-project=$DEBIAN_IMAGE_PROJECT \
     --boot-disk-size=$BOOT_DISK_SIZE \
-    --boot-disk-type=$BOOT_DISK_TYPE \
+    --boot-disk-type=$BOOT_DISK_TYPE
     --metadata-from-file startup-script="$STARTUP_SCRIPT_PATH"
 
 gcloud beta compute instances create "$UBUNTU_INSTANCE_NAME" \
@@ -59,7 +60,7 @@ gcloud beta compute instances create "$UBUNTU_INSTANCE_NAME" \
     --image=$UBUNTU_IMAGE \
     --image-project=$UBUNTU_IMAGE_PROJECT \
     --boot-disk-size=$BOOT_DISK_SIZE \
-    --boot-disk-type=$BOOT_DISK_TYPE \
+    --boot-disk-type=$BOOT_DISK_TYPE
     --metadata-from-file startup-script="$STARTUP_SCRIPT_PATH"
 
 cat <<EOF

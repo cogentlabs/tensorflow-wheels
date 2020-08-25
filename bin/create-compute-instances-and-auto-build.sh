@@ -49,11 +49,11 @@ BOOT_DISK_TYPE=pd-standard
 # since GCP instance names are at most 61 characters
 GCLOUD_USER=$(gcloud config get-value account | sed -e 's/@.*//g' -e 's/\.//g' | cut -c 1-7)
 
-DEBIAN_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-cascade-debian-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
+DEBIAN_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-debian-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
 DEBIAN_IMAGE=debian-9-stretch-v20180814
 DEBIAN_IMAGE_PROJECT=debian-cloud
 
-UBUNTU_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-cascade-ubuntu-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
+UBUNTU_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-ubuntu-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
 UBUNTU_IMAGE=ubuntu-1604-xenial-v20190430
 UBUNTU_IMAGE_PROJECT=ubuntu-os-cloud
 

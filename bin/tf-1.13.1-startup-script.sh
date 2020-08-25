@@ -12,22 +12,22 @@ export TENSORFLOW_RELEASE=v1.13.1
 # Setting these allows us to automate the "configure" step in Tensorflow compilation
 export PYTHON_BIN_PATH="/usr/local/bin/python3.6"
 export PYTHON_LIB_PATH="/usr/local/lib/python3.6/site-packages"
-export TF_NEED_JEMALLOC="yes"
-export TF_NEED_GCP="no"
-export TF_NEED_HDFS="no"
-export TF_NEED_AWS="no"
-export TF_NEED_S3="no"
-export TF_NEED_KAFKA="no"
-export TF_ENABLE_XLA="no"
-export TF_NEED_GDR="no"
-export TF_NEED_VERBS="no"
-export TF_NEED_OPENCL="no"
-export TF_NEED_CUDA="no"
-export TF_NEED_ROCM="no"
-export TF_DOWNLOAD_CLANG="no"
-export TF_NEED_OPENCL_SYCL="no"
-export TF_NEED_MPI="no"
-export TF_SET_ANDROID_WORKSPACE="no"
+export TF_NEED_JEMALLOC=1
+export TF_NEED_GCP=0
+export TF_NEED_HDFS=0
+export TF_NEED_AWS=0
+export TF_NEED_S3=0
+export TF_NEED_KAFKA=0
+export TF_ENABLE_XLA=0
+export TF_NEED_GDR=0
+export TF_NEED_VERBS=0
+export TF_NEED_OPENCL=0
+export TF_NEED_CUDA=0
+export TF_NEED_ROCM=0
+export TF_DOWNLOAD_CLANG=0
+export TF_NEED_OPENCL_SYCL=0
+export TF_NEED_MPI=0
+export TF_SET_ANDROID_WORKSPACE=0
 export CC_OPT_FLAGS="-march=native -msse4.1 -msse4.2 -mavx -mavx2 -mfma"
 
 # Dependencies
@@ -55,7 +55,7 @@ export PATH=$PATH:~/.local/bin/
 # Extra pip package dependencies...
 # numpy has upper-bound or things break in compile, see:
 # https://github.com/tensorflow/tensorflow/issues/41061
-pip install -U --user six "numpy<1.19.0" wheel setuptools mock
+pip install -U --user six "numpy<1.19.0" wheel setuptools mock 'future>=0.17.1' 'gast==0.3.3' typing_extensions
 pip install -U --user keras_applications==1.0.6 --no-deps
 pip install -U --user keras_preprocessing==1.0.5 --no-deps
 

@@ -16,5 +16,4 @@ Please add a new startup-script under the `bin/` folder having a name like `tf-x
 
 ## Architecture
 
-Haswell is deprecated, use Broadwell.
-
+Haswell/Broadwell is deprecated, use Cascade Lake.

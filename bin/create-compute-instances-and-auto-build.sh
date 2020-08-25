@@ -1,19 +1,38 @@
 #!/bin/bash
 
+usage() {
+    echo -e "\nusage: $0 TF_VERSION CPU_PLATFORM"
+}
+
 TF_VERSION=$1
 if ! [[ $TF_VERSION ]] || ! [[ $TF_VERSION =~ [0-9]+\.[0-9+\.[0-9]+ ]]; then
-    echo -e "\nusage: $0 TF_VERSION"
+    usage
     echo -e "\nTF_VERSION should be like x.x.x (eg 1.10.1)\n"
     exit 1
 fi
 
+CPU_PLATFORM=${2:-"Cascade Lake"}
+if [[ $CPU_PLATFORM == "Broadwell" ]]; then
+    MACHINE_TYPE=n1-standard-2
+    MIN_CPU_PLATFORM="Intel Broadwell"
+elif [[ $CPU_PLATFORM == "Cascade Lake" ]]; then
+    MACHINE_TYPE=n2-standard-2
+    MIN_CPU_PLATFORM="Intel Cascade Lake"
+else
+  usage
+  echo -e "\nCPU_PLATFORM should either be 'Broadwell' or 'Cascade Lake'\n"
+  exit 1
+fi
+
+SCRIPT_BASE=$(dirname "$0")
+
 STARTUP_SCRIPT_PATH=tf-${TF_VERSION}-startup-script.sh
 if ! [ -e $STARTUP_SCRIPT_PATH ]; then
-    if [ -e "bin/$STARTUP_SCRIPT_PATH" ]; then
-        STARTUP_SCRIPT_PATH="bin/$STARTUP_SCRIPT_PATH"
+    if [ -e "$SCRIPT_BASE/$STARTUP_SCRIPT_PATH" ]; then
+        STARTUP_SCRIPT_PATH="$SCRIPT_BASE/$STARTUP_SCRIPT_PATH"
     else
         echo -e "\nCould not find startup script for version ${TF_VERSION}"
-        echo -e "\nChecked $STARTUP_SCRIPT_PATH and ./bin/$STARTUP_SCRIPT_PATH\n"
+        echo -e "\nChecked $STARTUP_SCRIPT_PATH and $SCRIPT_BASE/$STARTUP_SCRIPT_PATH\n"
         exit 1
     fi
 fi
@@ -23,24 +42,24 @@ TF_VERSION_DOT=$(echo $TF_VERSION | sed -e 's/-/./g')
 
 PROJECT=algebraic-cycle-111108
 ZONE=asia-northeast1-b
-MACHINE_TYPE=n1-standard-2
-MIN_CPU_PLATFORM="Intel Broadwell"
 BOOT_DISK_SIZE=10GB
 BOOT_DISK_TYPE=pd-standard
 
-GCLOUD_USER=$(gcloud config get-value account | sed -e 's/@.*//g')
+# replace '.' with '' since a GCP instance name can't have a dot, and limit length
+# since GCP instance names are at most 61 characters
+GCLOUD_USER=$(gcloud config get-value account | sed -e 's/@.*//g' -e 's/\.//g' | cut -c 1-7)
 
-DEBIAN_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-broadwell-debian-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
+DEBIAN_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-debian-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
 DEBIAN_IMAGE=debian-9-stretch-v20180814
 DEBIAN_IMAGE_PROJECT=debian-cloud
 
-UBUNTU_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-broadwell-ubuntu-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
+UBUNTU_INSTANCE_NAME=tf-${TF_VERSION_DASH}-auto-build-ubuntu-$GCLOUD_USER-$(date +"%Y%m%d-%H%M%S")
 UBUNTU_IMAGE=ubuntu-1604-xenial-v20190430
 UBUNTU_IMAGE_PROJECT=ubuntu-os-cloud
 
 EXPECTED_WHEEL_NAME=tensorflow-${TF_VERSION_DOT}-cp36-cp36m-linux_x86_64.whl
 
-gcloud beta compute instances create "$DEBIAN_INSTANCE_NAME" \
+gcloud compute instances create "$DEBIAN_INSTANCE_NAME" \
     --project=$PROJECT \
     --zone=$ZONE \
     --machine-type=$MACHINE_TYPE \
@@ -51,7 +70,7 @@ gcloud beta compute instances create "$DEBIAN_INSTANCE_NAME" \
     --boot-disk-type=$BOOT_DISK_TYPE \
     --metadata-from-file startup-script="$STARTUP_SCRIPT_PATH"
 
-gcloud beta compute instances create "$UBUNTU_INSTANCE_NAME" \
+gcloud compute instances create "$UBUNTU_INSTANCE_NAME" \
     --project=$PROJECT \
     --zone=$ZONE \
     --machine-type=$MACHINE_TYPE \

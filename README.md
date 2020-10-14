@@ -14,6 +14,12 @@ There will be instructions printed by the creation script which will tell you ho
 
 Please add a new startup-script under the `bin/` folder having a name like `tf-x.x.x-startup-script` and manually verify that the entire script is runnable before comitting code to this repo.
 
+## Ubuntu v. Debian
+
+For production, benchmark tests, and CI, we run things in Docker. As things are when this was written, we use the python:3.6-slim image, which is based on Debian.
+However, we can't use Docker on our gpusrvs (which are Ubuntu), so when running things outside of Docker, we we supply Ubuntu Images. Note it is possible these may
+be usable across OS, but it is not guaranteed.
+
 ## Architecture
 
 Haswell/Broadwell is deprecated, use Cascade Lake.
